@@ -11,6 +11,7 @@
 - [Edge Cases Handled](#edge-cases-handled)
 - [Examples with Step-by-Step Explanation](#examples-with-step-by-step-explanation)
 - [Project Structure](#project-structure)
+- [Resources i use](#Resource-for-project)
 
 ---
 
@@ -456,7 +457,7 @@ ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG
 
 ---
 
-## Summary
+## Resource for project
 
 This push_swap implementation:
 
