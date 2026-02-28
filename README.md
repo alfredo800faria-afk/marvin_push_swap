@@ -11,7 +11,6 @@
 - [Edge Cases Handled](#edge-cases-handled)
 - [Examples with Step-by-Step Explanation](#examples-with-step-by-step-explanation)
 - [Project Structure](#project-structure)
-- [Evaluation Tips](#evaluation-tips)
 
 ---
 
@@ -109,14 +108,6 @@ Your program must detect and report errors for:
 sa (swap a):
    BEFORE:  [3] → [1] → [2]
    AFTER:   [1] → [3] → [2]
-   
-   ┌─────┐         ┌─────┐
-   │  3  │         │  1  │
-   ├─────┤   sa    ├─────┤
-   │  1  │   →     │  3  │
-   ├─────┤         ├─────┤
-   │  2  │         │  2  │
-   └─────┘         └─────┘
 ```
 
 ### Push Operations
@@ -129,16 +120,6 @@ sa (swap a):
 ```
 pb (push b):
    Stack A: [3, 1, 2]    Stack B: []
-   
-   ┌─────┐              ┌─────┐
-   │  3  │              │     │
-   ├─────┤     pb       ├─────┤
-   │  1  │     →        │  3  │ ← from A
-   ├─────┤              ├─────┤
-   │  2  │              │     │
-   └─────┘              └─────┘
-   
-   Stack A: [1, 2]      Stack B: [3]
 ```
 
 ### Rotate Operations (Shift Up)
@@ -153,14 +134,6 @@ pb (push b):
 ra (rotate a):
    BEFORE:  [3] → [1] → [2]
    AFTER:   [1] → [2] → [3]
-   
-   ┌─────┐         ┌─────┐
-   │  3  │         │  1  │
-   ├─────┤   ra    ├─────┤
-   │  1  │   →     │  2  │
-   ├─────┤         ├─────┤
-   │  2  │         │  3  │ ← was top
-   └─────┘         └─────┘
 ```
 
 ### Reverse Rotate Operations (Shift Down)
@@ -175,14 +148,6 @@ ra (rotate a):
 rra (reverse rotate a):
    BEFORE:  [3] → [1] → [2]
    AFTER:   [2] → [3] → [1]
-   
-   ┌─────┐         ┌─────┐
-   │  3  │         │  2  │ ← was bottom
-   ├─────┤  rra    ├─────┤
-   │  1  │   →     │  3  │
-   ├─────┤         ├─────┤
-   │  2  │         │  1  │
-   └─────┘         └─────┘
 ```
 
 ---
@@ -201,20 +166,9 @@ This implementation uses **different algorithms based on input size**:
 - **Max operations**: 2
 - **Why hardcoded?**: Only 3! = 6 permutations, we can solve each optimally
 
-```
-All 6 cases for 3 elements (sorted: 1, 2, 3):
-
-Case 1: [3, 2, 1] → sa → [2, 1, 3] → rra → [1, 2, 3]  (2 ops)
-Case 2: [3, 1, 2] → ra → [1, 2, 3]                     (1 op)
-Case 3: [2, 3, 1] → rra → [1, 2, 3]                    (1 op)
-Case 4: [2, 1, 3] → sa → [1, 2, 3]                     (1 op)
-Case 5: [1, 3, 2] → sa → [3, 1, 2] → ra → [1, 2, 3]   (2 ops)
-Case 6: [1, 2, 3] → already sorted                     (0 ops)
-```
-
 ### 3. Four Elements (sort_four)
 - **Logic**: Push smallest to B, sort 3 in A, push back
-- **Max operations**: ~8
+- **Max operations**: +/- 8
 
 ```
 Strategy:
@@ -227,7 +181,7 @@ Strategy:
 
 ### 4. Five Elements (sort_five)
 - **Logic**: Push two smallest to B, sort 3 in A, push back
-- **Max operations**: ~12
+- **Max operations**: +/- 12
 
 ### 5. Six or More Elements (radix_sort)
 - **Algorithm**: Radix Sort using binary representation
@@ -247,47 +201,6 @@ Indexes:    [2, 0, 3, 1]
 
 Now we sort the indexes instead of the original values!
 ```
-
-**Step 2: Sort by Each Bit**
-
-We process each bit position from right to left (bit 0, bit 1, bit 2, ...):
-
-```
-For each bit position:
-  - If bit is 0: push to B (pb)
-  - If bit is 1: keep in A, rotate (ra)
-  - Push everything back from B to A
-```
-
-**Example with [3, 2, 1] (indexes: [2, 1, 0]):**
-
-```
-Binary representation:
-  2 = 10 (binary)
-  1 = 01 (binary)
-  0 = 00 (binary)
-
-Bit 0 (rightmost):
-  - 2 has bit 0 = 0 → pb → B: [2]
-  - 1 has bit 0 = 1 → ra → stays in A
-  - 0 has bit 0 = 0 → pb → B: [0, 2]
-  Push back: A: [1, 0, 2]
-
-Bit 1 (second from right):
-  - 1 has bit 1 = 0 → pb → B: [1]
-  - 0 has bit 1 = 0 → pb → B: [0, 1]
-  - 2 has bit 1 = 1 → ra → stays in A
-  Push back: A: [2, 0, 1]
-
-Result: indexes [2, 0, 1] correspond to values [1000, -300, 0] sorted!
-```
-
-**Why This Works:**
-- Each pass partially sorts based on one bit
-- Numbers with bit 0 go to B, bit 1 stay in A
-- When pushed back, bit 0 numbers come first
-- After all bits processed, fully sorted!
-
 ---
 
 ## How to Use
@@ -350,13 +263,6 @@ ARG="4 2 7 1"; ./push_swap $ARG | ./checker_linux $ARG
 ### 1. Integer Overflow Protection
 
 ```c
-// Using long (64-bit) to detect overflow
-long ft_atol(const char *str)
-{
-    // ... convert string to long ...
-    return (result * sign);
-}
-
 // Check before using
 if (value > INT_MAX || value < INT_MIN)
     return (0);  // Error!
@@ -533,57 +439,6 @@ push_swap/
 
 ---
 
-## Evaluation Tips
-
-### Be Prepared to Explain
-
-1. **Why use linked lists?**
-   - Easy to add/remove from top (push/pop)
-   - No need to pre-allocate array size
-   - Easy to implement rotate operations
-
-2. **Why use long for parsing?**
-   - To detect overflow before it happens
-   - INT_MAX = 2147483647, but 2147483648 would overflow an int
-
-3. **Why use indexes for radix sort?**
-   - Radix sort needs non-negative integers
-   - Indexes simplify the problem (0, 1, 2, 3...)
-   - Maintains relative ordering information
-
-4. **Why different algorithms for different sizes?**
-   - Small inputs: optimized hardcoded solutions
-   - Large inputs: radix sort is simple and efficient
-
-5. **Complexity of your algorithm?**
-   - Sort 2: O(1)
-   - Sort 3: O(1)
-   - Radix sort: O(n × log n)
-
-### Common Evaluation Questions
-
-**Q: What happens if I input a number larger than INT_MAX?**
-
-A: The program uses `long` type during conversion. If the result is > INT_MAX or < INT_MIN, it prints "Error\n" and exits.
-
-```c
-long value = ft_atol(str);
-if (value > INT_MAX || value < INT_MIN)
-    print_error();  // "Error\n"
-```
-
-**Q: How does your radix sort handle negative numbers?**
-
-A: Before radix sort, I convert all numbers to indexes (0, 1, 2, ...). The smallest number gets index 0, the next smallest gets index 1, etc. Radix sort then works on these non-negative indexes.
-
-**Q: What's the maximum number of operations for 100 numbers?**
-
-A: With radix sort, approximately 700 operations. For 100 numbers, we need about 7 bits (log2(100) ≈ 7), so 7 passes × 100 numbers ≈ 700 operations.
-
-**Q: Why not use quicksort or mergesort?**
-
-A: Those algorithms don't translate well to the push_swap operations. Radix sort naturally fits the two-stack model: one bit = push to B or keep in A.
-
 ### Testing Commands for Evaluation
 
 ```bash
@@ -605,16 +460,5 @@ ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG
 
 This push_swap implementation:
 
-✅ **Handles all edge cases** (INT_MAX, INT_MIN, duplicates, invalid input)
-
-✅ **Uses optimal algorithms** for each input size
-
-✅ **Stays within operation limits** for grading
-
-✅ **Clean, well-commented code** easy to explain during evaluation
-
-✅ **Simple architecture** with only 4 files
 
 ---
-
-**Good luck with your evaluation! 🍀**
