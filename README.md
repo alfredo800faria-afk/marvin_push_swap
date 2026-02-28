@@ -7,7 +7,7 @@
 - [The Rules](#the-rules)
 - [Allowed Operations](#allowed-operations)
 - [Algorithm Explanation](#algorithm-explanation)
-- [How to Use](#how-to-use)
+- [How to Use/Run Project](#how-to-use)
 - [Edge Cases Handled](#edge-cases-handled)
 - [Examples with Step-by-Step Explanation](#examples-with-step-by-step-explanation)
 - [Project Structure](#project-structure)
