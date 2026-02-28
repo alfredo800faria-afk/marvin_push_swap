@@ -261,7 +261,7 @@ ARG="4 2 7 1"; ./push_swap $ARG | ./checker_linux $ARG
 
 ## Edge Cases Handled
 
-### 1. Integer Overflow Protection
+### Integer Overflow Protection
 
 ```c
 // Check before using
@@ -277,37 +277,13 @@ if (value > INT_MAX || value < INT_MIN)
 ./push_swap -2147483648   # OK (INT_MIN)
 ```
 
-### 2. Duplicate Detection
-
-```c
-int has_duplicates(t_stack *stack)
-{
-    t_node *current;
-    t_node *check;
-
-    current = stack->top;
-    while (current)
-    {
-        check = current->next;
-        while (check)
-        {
-            if (current->value == check->value)
-                return (1);  // Found duplicate!
-            check = check->next;
-        }
-        current = current->next;
-    }
-    return (0);
-}
-```
-
 **Test cases:**
 ```bash
 ./push_swap 1 2 1        # Error (duplicates)
 ./push_swap 5 5 5 5      # Error (duplicates)
 ```
 
-### 3. Non-Numeric Input
+### Non-Numeric Input
 
 ```bash
 ./push_swap 1 2 abc      # Error
@@ -315,19 +291,19 @@ int has_duplicates(t_stack *stack)
 ./push_swap ""           # Error
 ```
 
-### 4. Empty Input
+### Empty Input
 
 ```bash
 ./push_swap              # No output (not an error)
 ```
 
-### 5. Already Sorted
+### Already Sorted
 
 ```bash
 ./push_swap 1 2 3 4 5    # No output (already sorted)
 ```
 
-### 6. Single Element
+### Single Element
 
 ```bash
 ./push_swap 42           # No output (single element is sorted)
@@ -428,23 +404,16 @@ push_swap/
 ├── sort.c           # Sorting algorithms for different sizes
 └── Makefile         # Compilation rules
 ```
-
-### File Descriptions
-
-| File | Purpose | Key Functions |
-|------|---------|---------------|
-| `push_swap.h` | Header with declarations | `t_node`, `t_stack`, prototypes |
-| `push_swap.c` | Main logic | `main`, `parse_args`, `ft_atol`, `assign_indexes` |
-| `operations.c` | Stack operations | `sa`, `sb`, `pa`, `pb`, `ra`, `rra`, etc. |
-| `sort.c` | Sorting algorithms | `sort_two`, `sort_three`, `radix_sort` |
-
 ---
 
 ### Testing Commands for Evaluation
 
 ```bash
 # Test with random numbers (100 elements)
-ARG=$(shuf -i 1-1000 -n 100 | tr '\n' ' '); ./push_swap $ARG | wc -l
+ARG=$(shuf -i 1-1000 -n 100 | tr '\n' ' ); ./push_swap $ARG | wc -l
+
+# Test with random numbers (500 elements)
+ARG=$(seq -1000 1000 | shuf -n 500); ./push_swap $ARG | wc -l
 
 # Verify correctness with checker
 ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG
