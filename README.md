@@ -459,7 +459,7 @@ ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG
 
 ## Resource for project
 
-This push_swap implementation:
+[Dynamicdispatch project push_swap](https://dynamicdispat.ch/posts/2024/01/push-swap/)
 
 
 ---
