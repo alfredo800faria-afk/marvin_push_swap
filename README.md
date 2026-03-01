@@ -91,17 +91,16 @@ Your program must detect and report errors for:
 | `sb` | Swap first 2 elements of Stack B | `[5, 4] → [4, 5]` |
 | `ss` | `sa` and `sb` at the same time | Both stacks swap |
 
-```
+---
 
-Strategy:
+## Strategy:
 1. Find smallest element
 2. Move it to top (using ra or rra)
 3. Push to B (pb)
 4. Sort remaining 3 elements in A
 5. Push back from B (pa)
----
 
-## How to Use
+---
 
 ### Compilation
 
@@ -118,6 +117,7 @@ make fclean
 # Rebuild
 make re
 ```
+---
 
 ### Running the Program
 
@@ -137,6 +137,7 @@ make re
 # Multiple formats combined
 ./push_swap 1 2 "3 4" 5
 ```
+---
 
 ### Testing
 
@@ -153,6 +154,7 @@ make test_edge
 # Use with checker
 ARG="4 2 7 1"; ./push_swap $ARG | ./checker_linux $ARG
 ```
+
 ---
 
 ## Project Structure
@@ -206,6 +208,9 @@ ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG
 ## Resource for project
 
 [Dynamicdispatch project push_swap](https://dynamicdispat.ch/posts/2024/01/push-swap/)
+[42 Tokyo Project Push Swap](https://zenn.dev/uta_san1012/articles/bfa9cabfeadc51)
+[Yigit Ogun Push Swap](https://medium.com/@ayogun/push-swap-c1f5d2d41e97)
+[To0nsa Push Swap Gitbook](https://to0nsa.github.io/push_swap/)
 
 
 ---
