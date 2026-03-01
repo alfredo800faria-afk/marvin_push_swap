@@ -1,18 +1,4 @@
 # Push Swap - School 42 Project
-
-## 📋 Table of Contents
-
-- [Project Overview](#project-overview)
-- [What is Push Swap?](#what-is-push-swap)
-- [The Rules](#the-rules)
-- [Allowed Operations](#allowed-operations)
-- [Algorithm Explanation](#algorithm-explanation)
-- [How to Use/Run Project](#how-to-use)
-- [Edge Cases Handled](#edge-cases-handled)
-- [Examples with Step-by-Step Explanation](#examples-with-step-by-step-explanation)
-- [Project Structure](#project-structure)
-- [Resources i use](#Resource-for-project)
-
 ---
 
 ## Project Overview
@@ -106,102 +92,13 @@ Your program must detect and report errors for:
 | `ss` | `sa` and `sb` at the same time | Both stacks swap |
 
 ```
-sa (swap a):
-   BEFORE:  [3] → [1] → [2]
-   AFTER:   [1] → [3] → [2]
-```
 
-### Push Operations
-
-| Operation | Description |
-|-----------|-------------|
-| `pa` | Push top element from B to A |
-| `pb` | Push top element from A to B |
-
-```
-pb (push b):
-   Stack A: [3, 1, 2]    Stack B: []
-```
-
-### Rotate Operations (Shift Up)
-
-| Operation | Description |
-|-----------|-------------|
-| `ra` | Rotate Stack A up (top goes to bottom) |
-| `rb` | Rotate Stack B up |
-| `rr` | `ra` and `rb` at the same time |
-
-```
-ra (rotate a):
-   BEFORE:  [3] → [1] → [2]
-   AFTER:   [1] → [2] → [3]
-```
-
-### Reverse Rotate Operations (Shift Down)
-
-| Operation | Description |
-|-----------|-------------|
-| `rra` | Reverse rotate Stack A (bottom goes to top) |
-| `rrb` | Reverse rotate Stack B |
-| `rrr` | `rra` and `rrb` at the same time |
-
-```
-rra (reverse rotate a):
-   BEFORE:  [3] → [1] → [2]
-   AFTER:   [2] → [3] → [1]
-```
-
----
-
-## Algorithm Explanation
-
-This implementation uses **different algorithms based on input size**:
-
-### 1. Two Elements (sort_two)
-- **Logic**: Simply swap if not sorted
-- **Max operations**: 1
-- **Example**: `[2, 1] → sa → [1, 2]`
-
-### 2. Three Elements (sort_three)
-- **Logic**: Hardcoded optimal solution for all 6 possible arrangements
-- **Max operations**: 2
-- **Why hardcoded?**: Only 3! = 6 permutations, we can solve each optimally
-
-### 3. Four Elements (sort_four)
-- **Logic**: Push smallest to B, sort 3 in A, push back
-- **Max operations**: +/- 8
-
-```
 Strategy:
 1. Find smallest element
 2. Move it to top (using ra or rra)
 3. Push to B (pb)
 4. Sort remaining 3 elements in A
 5. Push back from B (pa)
-```
-
-### 4. Five Elements (sort_five)
-- **Logic**: Push two smallest to B, sort 3 in A, push back
-- **Max operations**: +/- 12
-
-### 5. Six or More Elements (radix_sort)
-- **Algorithm**: Radix Sort using binary representation
-- **Complexity**: O(n × log n)
-- **Why Radix Sort?**: Simple to understand, guaranteed efficiency
-
-#### How Radix Sort Works
-
-**Step 1: Simplify Numbers to Indexes**
-
-Since radix sort needs non-negative integers, we convert all numbers to simple indexes:
-
-```
-Original:   [500, -300, 1000, 0]
-Sorted:     [-300, 0, 500, 1000]
-Indexes:    [2, 0, 3, 1]
-
-Now we sort the indexes instead of the original values!
-```
 ---
 
 ## How to Use
@@ -253,143 +150,8 @@ make test_edge
 # Count operations
 ./push_swap 5 4 3 2 1 | wc -l
 
-# Use with checker (download from 42 intranet)
+# Use with checker
 ARG="4 2 7 1"; ./push_swap $ARG | ./checker_linux $ARG
-```
-
----
-
-## Edge Cases Handled
-
-### Integer Overflow Protection
-
-```c
-// Check before using
-if (value > INT_MAX || value < INT_MIN)
-    return (0);  // Error!
-```
-
-**Test cases:**
-```bash
-./push_swap 2147483648    # Error (INT_MAX + 1)
-./push_swap -2147483649   # Error (INT_MIN - 1)
-./push_swap 2147483647    # OK (INT_MAX)
-./push_swap -2147483648   # OK (INT_MIN)
-```
-
-**Test cases:**
-```bash
-./push_swap 1 2 1        # Error (duplicates)
-./push_swap 5 5 5 5      # Error (duplicates)
-```
-
-### Non-Numeric Input
-
-```bash
-./push_swap 1 2 abc      # Error
-./push_swap 1 2 3a       # Error
-./push_swap ""           # Error
-```
-
-### Empty Input
-
-```bash
-./push_swap              # No output (not an error)
-```
-
-### Already Sorted
-
-```bash
-./push_swap 1 2 3 4 5    # No output (already sorted)
-```
-
-### Single Element
-
-```bash
-./push_swap 42           # No output (single element is sorted)
-```
-
----
-
-## Examples with Step-by-Step Explanation
-
-### Example 1: Two Elements
-
-```bash
-$ ./push_swap 2 1
-sa
-```
-
-**Explanation:**
-```
-Initial:  A: [2, 1]    B: []
-After sa: A: [1, 2]    B: []  ✓ Sorted!
-```
-
-### Example 2: Three Elements
-
-```bash
-$ ./push_swap 3 2 1
-sa
-rra
-```
-
-**Explanation:**
-```
-Initial:      A: [3, 2, 1]    B: []
-
-After sa:     A: [2, 3, 1]    B: []
-              (swapped 3 and 2)
-
-After rra:    A: [1, 2, 3]    B: []  ✓ Sorted!
-              (moved bottom 1 to top)
-```
-
-### Example 3: Five Elements
-
-```bash
-$ ./push_swap 5 4 3 2 1
-pb
-pb
-sa
-ra
-pa
-pa
-```
-
-**Explanation:**
-```
-Initial:    A: [5, 4, 3, 2, 1]    B: []
-
-pb:         A: [4, 3, 2, 1]      B: [5]
-pb:         A: [3, 2, 1]         B: [4, 5]
-sa:         A: [2, 3, 1]         B: [4, 5]
-ra:         A: [3, 1, 2]         B: [4, 5]
-pa:         A: [4, 3, 1, 2]      B: [5]
-pa:         A: [5, 4, 3, 1, 2]   B: []
-
-Wait, this doesn't look right... Let me check the actual algorithm!
-```
-
-### Example 4: Large Numbers
-
-```bash
-$ ./push_swap 2147483647 -2147483648 0
-pb
-ra
-pa
-```
-
-**Explanation:**
-```
-The program correctly handles INT_MAX and INT_MIN!
-
-Initial indexes after simplification:
-  2147483647  → index 2
-  -2147483648 → index 0
-  0           → index 1
-
-Radix sort on indexes [2, 0, 1] produces correct output.
 ```
 
 ---
@@ -397,12 +159,28 @@ Radix sort on indexes [2, 0, 1] produces correct output.
 ## Project Structure
 
 ```
-push_swap/
-├── push_swap.h      # Header file with structures and prototypes
-├── push_swap.c      # Main file: parsing, validation, main function
-├── operations.c     # All stack operations (sa, sb, pa, pb, ra, rra, etc.)
-├── sort.c           # Sorting algorithms for different sizes
-└── Makefile         # Compilation rules
+project-root/
+├── Makefile                      # Build instructions for the project
+├── push_swap.c                  # Main entry point for the Push Swap program
+├── push_swap.h                  # Header file containing function declarations and macros
+├── sort.c                       # Implementation of sorting algorithms
+├── libft/                       # Custom library for utility functions
+│   ├── ft_atoi.c                # Converts a string to an integer
+│   ├── ft_isdigit.c             # Checks if a character is a digit
+│   ├── ft_lstadd_back.c         # Adds a node to the end of a linked list
+│   ├── ft_lstnew.c              # Creates a new linked list node
+│   └── func_ptr.c               # Contains function pointers for various operations
+├── moves/                       # Contains functions related to stack operations
+│   ├── push.c                   # Pushes an element onto the stack
+│   ├── revrotate.c              # Rotates the stack in the reverse direction
+│   ├── rotate.c                 # Rotates the stack in the forward direction
+│   └── swap.c                   # Swaps the top two elements of the stack
+└── parse/                       # Functions for parsing input and handling stack data
+    ├── check_input.c            # Validates user input for correctness
+    ├── fill_stack.c             # Fills a stack with input values
+    ├── find_util.c              # Utility functions for finding elements in the stack
+    ├── get_ops.c                # Retrieves operations based on input
+    └── get_util.c               # Other utility functions for the parsing process
 ```
 ---
 
