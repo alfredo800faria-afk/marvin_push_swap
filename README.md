@@ -19,8 +19,8 @@ You must sort Stack A in **ascending order** (smallest on top) using only the al
 |-------------------|---------------------------|
 | 3 elements | ≤ 3 operations |
 | 5 elements | ≤ 12 operations |
-| 100 elements | < 700 operations (full points) |
-| 500 elements | < 5500 operations (full points) |
+| 100 elements | < 700 operations |
+| 500 elements | < 5500 operations |
 
 ---
 
