@@ -208,10 +208,11 @@ ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_linux $ARG
 ## Resource for project
 
 [Dynamicdispatch project push_swap](https://dynamicdispat.ch/posts/2024/01/push-swap/)
-[42 Tokyo Project Push Swap](https://zenn.dev/uta_san1012/articles/bfa9cabfeadc51)
-[Yigit Ogun Push Swap](https://medium.com/@ayogun/push-swap-c1f5d2d41e97)
-[To0nsa Push Swap Gitbook](https://to0nsa.github.io/push_swap/)
----
 
+[42 Tokyo Project Push Swap](https://zenn.dev/uta_san1012/articles/bfa9cabfeadc51)
+
+[Yigit Ogun Push Swap](https://medium.com/@ayogun/push-swap-c1f5d2d41e97)
+
+[To0nsa Push Swap Gitbook](https://to0nsa.github.io/push_swap/)
 
 ---
