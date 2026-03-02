@@ -80,17 +80,28 @@ Your program must detect and report errors for:
 - Numbers outside INT range (-2147483648 to 2147483647)
 
 ---
+### Operations Available
 
-## Allowed Operations
+The program can only use these 11 operations:
 
-### Swap Operations
+**Swap Operations:**
+- `sa`: Swap first 2 elements of stack A
+- `sb`: Swap first 2 elements of stack B
+- `ss`: sa and sb simultaneously
 
-| Operation | Description | Example |
-|-----------|-------------|---------|
-| `sa` | Swap first 2 elements of Stack A | `[3, 1, 2] → [1, 3, 2]` |
-| `sb` | Swap first 2 elements of Stack B | `[5, 4] → [4, 5]` |
-| `ss` | `sa` and `sb` at the same time | Both stacks swap |
+**Push Operations:**
+- `pa`: Push first element of B to A
+- `pb`: Push first element of A to B
 
+**Rotate Operations:**
+- `ra`: Rotate stack A up (first → last)
+- `rb`: Rotate stack B up
+- `rr`: ra and rb simultaneously
+
+**Reverse Rotate Operations:**
+- `rra`: Rotate stack A down (last → first)
+- `rrb`: Rotate stack B down
+- `rrr`: rra and rrb simultaneously
 ---
 
 ## Strategy:
