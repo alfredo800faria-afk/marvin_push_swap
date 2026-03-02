@@ -1,6 +1,6 @@
 This project has been created as part of the 42 curriculum by srusso-b
 
-# Push Swap - School 42 Project
+# Project Push Swap
 ---
 
 ## Project Overview
