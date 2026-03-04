@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push_Swap Simulator | 42 Project</title>
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --stack-bg: #2d2d2d;
+            --block-color: #00babc;
+            --block-sorted: #5cb85c;
+            --text-color: #ffffff;
+            --btn-bg: #444;
+            --btn-hover: #666;
+            --accent: #ffae00;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 { margin: 0; }
+        .stats { font-size: 1.2rem; color: var(--accent); margin-top: 10px; }
+
+        /* Game Area */
+        .game-container {
+            display: flex;
+            gap: 20px;
+            flex-grow: 1;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .stack-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #555;
+            background-color: var(--stack-bg);
+            border-radius: 8px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .stack-label {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+
+        .stack-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Top of stack is top of div */
+            height: 100%;
+            overflow-y: auto;
+            gap: 2px;
+        }
+
+        /* Number Blocks */
+        .block {
+            background-color: var(--block-color);
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            width: 100%; 
+            box-sizing: border-box;
+        }
+
+        .block.sorted-visual {
+            background-color: var(--block-sorted);
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        button {
+            background-color: var(--btn-bg);
+            color: white;
+            border: 1px solid #555;
+            padding: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        button:hover { background-color: var(--btn-hover); }
+        button:active { transform: translateY(2px); }
+
+        .settings {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            border-radius: 4px;
+            border: none;
+            width: 60px;
+        }
+
+        #win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 186, 188, 0.9);
+            color: black;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        /* Visualizing value as width */
+        .block {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+        }
+        
+        .val-bar {
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 0;
+        }
+        .val-text { z-index: 1; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Push_Swap</h1>
+        <div class="stats">Moves: <span id="move-count">0</span></div>
+    </header>
+
+    <div class="game-container">
+        <div class="stack-container">
+            <div class="stack-label">Stack A</div>
+            <div class="stack-content" id="stack-a"></div>
+        </div>
+        <div class="stack-container">
+            <div class="stack-label">Stack B</div>
+            <div class="stack-content" id="stack-b"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <!-- Swaps -->
+        <div class="control-group">
+            <label>Swap</label>
+            <button onclick="op('sa')">sa</button>
+            <button onclick="op('sb')">sb</button>
+            <button onclick="op('ss')">ss</button>
+        </div>
+        <!-- Pushes -->
+        <div class="control-group">
+            <label>Push</label>
+            <button onclick="op('pa')">pa</button>
+            <button onclick="op('pb')">pb</button>
+        </div>
+        <!-- Rotates -->
+        <div class="control-group">
+            <label>Rotate</label>
+            <button onclick="op('ra')">ra</button>
+            <button onclick="op('rb')">rb</button>
+            <button onclick="op('rr')">rr</button>
+        </div>
+        <!-- Reverse Rotates -->
+        <div class="control-group">
+            <label>Rev. Rotate</label>
+            <button onclick="op('rra')">rra</button>
+            <button onclick="op('rrb')">rrb</button>
+            <button onclick="op('rrr')">rrr</button>
+        </div>
+    </div>
+
+    <div class="settings">
+        <label>Count:</label>
+        <input type="number" id="num-elements" value="10" min="3" max="500">
+        <button onclick="initGame()">New Game</button>
+    </div>
+
+    <div id="win-message">
+        <h2>🎉 SORTED! 🎉</h2>
+        <p>Total Moves: <span id="final-moves"></span></p>
+        <button onclick="closeWin()" style="background: #333; color: white;">Close</button>
+    </div>
+
+    <script>
+        // State
+        let stackA = [];
+        let stackB = [];
+        let moves = 0;
+        let maxVal = 0;
+
+        // DOM Elements
+        const elStackA = document.getElementById('stack-a');
+        const elStackB = document.getElementById('stack-b');
+        const elMoves = document.getElementById('move-count');
+        const elWinMsg = document.getElementById('win-message');
+        const elFinalMoves = document.getElementById('final-moves');
+
+        function initGame() {
+            const count = parseInt(document.getElementById('num-elements').value) || 10;
+            stackA = generateRandomArray(count);
+            stackB = [];
+            moves = 0;
+            maxVal = Math.max(...stackA);
+            
+            updateUI();
+            elWinMsg.style.display = 'none';
+        }
+
+        // Helper: Generate distinct random numbers
+        function generateRandomArray(size) {
+            const arr = [];
+            while(arr.length < size){
+                const r = Math.floor(Math.random() * size * 2) + 1; // Range
+                if(arr.indexOf(r) === -1) arr.push(r);
+            }
+            return arr;
+        }
+
+        // --- OPERATIONS (Strict 42 Rules) ---
+
+        // Swap: Swap the first 2 elements at the top of stack
+        function swap(stack) {
+            if (stack.length < 2) return;
+            [stack[0], stack[1]] = [stack[1], stack[0]];
+        }
+
+        // Push: Take the first element at the top of src and put it at the top of dest
+        function push(src, dest) {
+            if (src.length === 0) return;
+            dest.unshift(src.shift());
+        }
+
+        // Rotate: Shift up all elements by 1. The first element becomes the last one.
+        function rotate(stack) {
+            if (stack.length < 2) return;
+            stack.push(stack.shift());
+        }
+
+        // Reverse Rotate: Shift down all elements by 1. The last element becomes the first one.
+        function reverseRotate(stack) {
+            if (stack.length < 2) return;
+            stack.unshift(stack.pop());
+        }
+
+        // Main Operation Dispatcher
+        function op(action) {
+            let performed = false;
+
+            switch(action) {
+                case 'sa': swap(stackA); performed = true; break;
+                case 'sb': swap(stackB); performed = true; break;
+                case 'ss': swap(stackA); swap(stackB); performed = true; break;
+                
+                case 'pa': 
+                    if(stackB.length > 0) { push(stackB, stackA); performed = true; }
+                    break;
+                case 'pb': 
+                    if(stackA.length > 0) { push(stackA, stackB); performed = true; }
+                    break;
+                
+                case 'ra': rotate(stackA); performed = true; break;
+                case 'rb': rotate(stackB); performed = true; break;
+                case 'rr': rotate(stackA); rotate(stackB); performed = true; break;
+
+                case 'rra': reverseRotate(stackA); performed = true; break;
+                case 'rrb': reverseRotate(stackB); performed = true; break;
+                case 'rrr': reverseRotate(stackA); reverseRotate(stackB); performed = true; break;
+            }
+
+            if (performed) {
+                moves++;
+                updateUI();
+                checkWin();
+            }
+        }
+
+        // --- RENDERING ---
+
+        function renderStack(stack, container) {
+            container.innerHTML = '';
+            stack.forEach(val => {
+                const el = document.createElement('div');
+                el.className = 'block';
+                
+                // Visual bar width relative to max value
+                const widthPerc = Math.max(10, (val / maxVal) * 100);
+                el.style.width = `${widthPerc}%`;
+                
+                // If sorted in A, we might color it differently (logic below is simpler)
+                el.innerHTML = `<span class="val-text">${val}</span>`;
+                container.appendChild(el);
+            });
+        }
+
+        function updateUI() {
+            renderStack(stackA, elStackA);
+            renderStack(stackB, elStackB);
+            elMoves.innerText = moves;
+
+            // Visual flair: Color Stack A green if totally sorted
+            if(isSorted(stackA) && stackB.length === 0) {
+                Array.from(elStackA.children).forEach(c => c.classList.add('sorted-visual'));
+            }
+        }
+
+        function isSorted(arr) {
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (arr[i] > arr[i + 1]) return false;
+            }
+            return true;
+        }
+
+        function checkWin() {
+            if (stackB.length === 0 && isSorted(stackA)) {
+                setTimeout(() => {
+                    elFinalMoves.innerText = moves;
+                    elWinMsg.style.display = 'block';
+                }, 100);
+            }
+        }
+
+        function closeWin() {
+            elWinMsg.style.display = 'none';
+        }
+
+        // Init on load
+        initGame();
+
+    </script>
+</body>
+</html>
