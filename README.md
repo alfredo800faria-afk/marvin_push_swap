@@ -103,22 +103,22 @@ This implementation is optimized to meet 42's scoring criteria:
 
 ```
 marvin_push_swap/
-├── Makefile              # Build configuration with clean/fclean/re targets
-├── push_swap.c           # Main entry point: arg parsing, validation, execution
-├── push_swap.h           # Header: function declarations, macros, constants
-├── parse_args.c          # Input validation and argument parsing logic
-├── utils_parse.c         # Helper functions for parsing utilities
-├── sort.c                # Core sorting algorithm implementation
-├── utils_sort.c          # Sorting helpers: median, chunking, index mapping
-├── swap_op.c             # sa, sb, ss operation implementations
-├── push.c                # pa, pb push operations
-├── rotate.c              # ra, rb rotation operations
-├── rev_rotate.c          # rra, rrb reverse rotation operations
-├── utils.c               # General utilities: stack management, printing
-└── libft/                # (Optional) Custom utility library if used
-    ├── ft_atoi.c
-    ├── ft_isdigit.c
-    └── ...
+├── Makefile				# Build configuration with clean/fclean/re targets
+├── README.md 				# Readme.md file for this project
+├── index.html 				# Simulator in HTML
+├── parse_args.c 			# Input validation and argument parsing logic
+├── push.c 					# pa, pb push operations
+├── push_swap.c 			# Main entry point: arg parsing, validation, execution
+├── push_swap.h 			# Header: function declarations, macros, constants
+├── rev_rotate.c 			# rra, rrb reverse rotation operations
+├── rotate.c 				# ra, rb rotation operations
+├── sort.c 					# Core sorting algorithm implementation
+├── swap_op.c 				# sa, sb, ss operation implementations
+├── test500randomoves.py 	# Script in python to run random 500 numbers
+├── utils.c 				# General utilities: stack management
+├── utils_parse.c 			# Helper functions for parsing utilities
+└── utils_sort.c 			# Sorting helpers: median, chunking, index mapping
+
 ```
 
 ---
